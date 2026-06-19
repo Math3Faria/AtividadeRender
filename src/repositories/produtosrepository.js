@@ -3,7 +3,7 @@ import { connection } from "../config/Database.js";
 const produtoModel = {
 
     cadastrar: async (p) => {
-        const sql = 'insert into produtos (idCategoria, nomeProduto, valorProduto, vinculoImagem, dataCad) values (?, ?, ?, ?, NOW());';
+        const sql = 'insert into produtos (id_categoria, nomeProduto, valorProduto, vinculoImagem, dataCad) values (?, ?, ?, ?, NOW());';
         const values = [p.idCategoria, p.nomeProduto, p.valorProduto, p.vinculoImagem];
         const [rows] = await connection.execute(sql, values);
         return rows;
