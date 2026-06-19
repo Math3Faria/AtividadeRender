@@ -1,8 +1,8 @@
- import mysql from 'mysql2/promise';
+
+import mysql from 'mysql2/promise';
 import dotenv from 'dotenv';
 
 
-// Singleton para a conexão com o banco de dados
 class Database {
     static #instance = null;
     #pool = null;
@@ -55,7 +55,7 @@ export async function initializeDatabase() {
         });
 
 
-        const dbName = process.env.DB_DATABASE || 'deploy';
+        const dbName = process.env.DB_DATABASE || 'S1_R6 - AT1_PBE 2';
 
 
         await tempConnection.query(`CREATE DATABASE IF NOT EXISTS \`${dbName}\`;`);
@@ -63,23 +63,25 @@ export async function initializeDatabase() {
 
 
         await tempConnection.query(`
-            CREATE TABLE IF NOT EXISTS categorias (
-                id INT PRIMARY KEY AUTO_INCREMENT,
-                nome VARCHAR(30) NOT NULL,
-                descricao VARCHAR(300) NULL
-            );
+            create table if not exists categoria (
+            idCategoria INT PRIMARY KEY AUTO_INCREMENT,
+            descricaoCategoria VARCHAR(200)NOT NULL,
+            dataCad TIMESTAMP DEFAULT CURRENT_TIMESTAMP );
         `);
 
 
         await tempConnection.query(`
-            CREATE TABLE IF NOT EXISTS produtos (
-                id INT PRIMARY KEY AUTO_INCREMENT,
-                nome VARCHAR(30) NOT NULL,
-                valor DECIMAL(15,2) NOT NULL,
-                id_categoria INT,
-                FOREIGN KEY (id_categoria) REFERENCES categorias(id)
+            create table if not exists produtos (
+            idProduto CHAR(36) DEFAULT(uuid()) PRIMARY KEY,
+            idCategoria INT NOT NULL,
+            nomeProduto VARCHAR(100) NOT NULL,
+            valorProduto DECIMAL (10,2) NOT NULL,
+            vinculoImagem VARCHAR(255) NOT NULL,
+            dataCad TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (idCategoria) references categoria (idCategoria)
             );
         `);
+
 
 
         await tempConnection.end();
